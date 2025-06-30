@@ -1,0 +1,222 @@
+.reservation-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.restaurant-info {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-info h2 {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+}
+
+.restaurant-info p {
+  line-height: 1.6;
+}
+
+.reservation-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.date-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.nav-button {
+  background: none;
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.nav-button:hover {
+  background-color: #f5f5f5;
+}
+
+.calendar {
+  height: 200px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.tables-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.back-button, .continue-button {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.back-button {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.back-button:hover {
+  background-color: #e0e0e0;
+}
+
+.continue-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.continue-button:hover {
+  background-color: #c0392b;
+}
+
+.continue-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .reservation-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .tables-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .back-button, .continue-button {
+    width: 100%;
+  }
+
+  /* Estilos para el calendario */
+.calendar-container {
+  display: flex;
+  justify-content: center;  /* Centra horizontalmente */
+  margin-top: 20px;
+}
+
+.custom-calendar {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.date-selector {
+  text-align: center;
+  margin-bottom: 10px;       /* Más espacio entre texto y calendario */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;       /* Centra todo el contenido del form-group */
+}
+
+.custom-calendar .react-datepicker__header {
+  background-color: #f8f9fa;
+  border-bottom: none;
+}
+
+.custom-calendar .react-datepicker__day-names {
+  margin-top: 0.5rem;
+}
+
+.custom-calendar .react-datepicker__day-name {
+  color: #333;
+  font-weight: 500;
+  width: 2.5rem;
+  line-height: 2.5rem;
+}
+
+.custom-calendar .react-datepicker__day {
+  width: 2.5rem;
+  line-height: 2.5rem;
+  margin: 0.2rem;
+  border-radius: 50%;
+}
+
+.custom-calendar .react-datepicker__day:hover {
+  background-color: #f0f0f0;
+}
+
+.custom-calendar .react-datepicker__day--selected {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.custom-calendar .react-datepicker__day--selected:hover {
+  background-color: #c0392b;
+}
+
+.custom-calendar .react-datepicker__day--disabled {
+  color: #ccc;
+}
+
+.custom-calendar .react-datepicker__navigation {
+  top: 1rem;
+}
+
+.custom-calendar .react-datepicker__current-month {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.custom-calendar .react-datepicker__month-container {
+  width: 100%;
+}
+}

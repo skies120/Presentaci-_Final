@@ -1,0 +1,68 @@
+.dish-card-container {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 340px;
+  height: 400px;
+  transition: transform 0.3s ease;
+  margin: 10px auto; 
+}
+
+
+.dish-card-container:hover {
+  transform: scale(1.03);
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+}
+
+.dish-card-container.flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-front,
+.flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.flip-front img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+.more-info-btn,
+.back-btn {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.more-info-btn:hover,
+.back-btn:hover {
+  background-color: #3672ea;
+}
