@@ -1,37 +1,40 @@
-/* src/CSS/AdminPage.css */
-
+/* BODY GLOBAL */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f7f9fb;
-  margin: 0;
-  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Tipografía limpia y moderna */
+  background-color: #f7f9fb; /* Color de fondo general */
+  margin: 0; /* Elimina márgenes por defecto */
+  padding: 0; /* Elimina padding por defecto */
 }
 
+/* CONTENEDOR GENERAL DEL ADMIN */
 .admin-container {
-  padding: 30px;
-  max-width: 1200px;
-  margin: auto;
+  padding: 30px; /* Espacio interior */
+  max-width: 1200px; /* Ancho máximo para no crecer ilimitado */
+  margin: auto; /* Centra el contenedor horizontalmente */
 }
 
-/* TOP PANEL */
+/* ===================
+    PANEL SUPERIOR 
+   =================== */
 .top-panel {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #2c3e50;
-  color: white;
-  padding: 15px 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex; /* Layout horizontal con flexbox */
+  justify-content: space-between; /* Espaciado entre título y botón */
+  align-items: center; /* Centrado vertical */
+  background-color: #2c3e50; /* Fondo azul oscuro */
+  color: white; /* Texto blanco */
+  padding: 15px 30px; /* Espaciado interno */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sombra sutil */
 }
 
 .top-panel h2 {
-  margin: 0;
+  margin: 0; /* Elimina margen superior/inferior */
   font-size: 24px;
 }
 
+/* BOTÓN DE LOGOUT */
 .logout-btn {
-  background: #e74c3c;
+  background: #e74c3c; /* Rojo */
   color: white;
   border: none;
   padding: 10px 20px;
@@ -39,12 +42,13 @@ body {
   border-radius: 6px;
   cursor: pointer;
 }
-
 .logout-btn:hover {
-  background: #c0392b;
+  background: #c0392b; /* Más oscuro al pasar mouse */
 }
 
-/* CALENDARIO */
+/* ===================
+    CALENDARIO
+   =================== */
 .calendar-container {
   background: white;
   border-radius: 12px;
@@ -53,6 +57,7 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
+/* Navegación del calendario (botones para cambiar mes, etc.) */
 .calendar-nav {
   display: flex;
   justify-content: space-between;
@@ -60,9 +65,10 @@ body {
   margin-bottom: 10px;
 }
 
+/* Títulos de los días de la semana y grid de días */
 .calendar-header, .calendar-week {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, 1fr); /* 7 columnas para los días */
   text-align: center;
 }
 
@@ -71,6 +77,7 @@ body {
   padding: 8px 0;
 }
 
+/* Cada día del calendario */
 .calendar-day {
   padding: 12px;
   margin: 2px;
@@ -78,19 +85,21 @@ body {
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
-
 .calendar-day:hover {
-  background: #3498db;
+  background: #3498db; /* Azul */
   color: white;
 }
 
+/* Días que tienen reservas se muestran resaltados */
 .has-reservations {
   font-weight: bold;
   background: #ecf0f1;
   border: 1px solid #3498db;
 }
 
-/* RESERVAS */
+/* ===================
+    LISTA DE RESERVAS
+   =================== */
 .reservas-container {
   background: white;
   border-radius: 12px;
@@ -99,6 +108,7 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
+/* Encabezado de la lista */
 .reservas-header {
   display: flex;
   justify-content: space-between;
@@ -110,43 +120,44 @@ body {
   margin: 0;
 }
 
+/* Botón general dentro del contenedor de reservas */
 .reservas-container button {
-  background: #2ecc71;
+  background: #2ecc71; /* Verde */
   color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
 }
-
 .reservas-container button:hover {
   background: #27ae60;
 }
 
+/* Cada ítem de reserva */
 .reserva-item {
   background: #f8f9fa;
   padding: 15px;
   margin-bottom: 10px;
-  border-left: 4px solid #3498db;
+  border-left: 4px solid #3498db; /* Línea azul al lado */
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s;
 }
-
 .reserva-item:hover {
   background: #e8f4fc;
 }
 
-/* MODAL */
+/* ===================
+    MODAL PARA FORM
+   =================== */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4); /* Sombra oscura translúcida */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 9999; /* Siempre encima */
 }
 
 .modal {
@@ -164,10 +175,12 @@ body {
   color: #2c3e50;
 }
 
-/* FORMULARIO */
+/* ===================
+    FORMULARIO DEL MODAL
+   =================== */
 .modal form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* Dos columnas */
   gap: 15px;
 }
 
@@ -180,13 +193,15 @@ body {
 }
 
 .modal form textarea {
-  grid-column: span 2;
-  resize: vertical;
+  grid-column: span 2; /* Ocupa las dos columnas */
+  resize: vertical;    /* Permite cambiar tamaño vertical */
 }
 
-/* BOTONES DEL FORM */
+/* ===================
+    BOTONES DEL FORM
+   =================== */
 .form-buttons {
-  grid-column: span 2;
+  grid-column: span 2; /* Ocupa las dos columnas */
   display: flex;
   justify-content: flex-end;
   gap: 10px;
@@ -201,8 +216,9 @@ body {
   cursor: pointer;
 }
 
+/* Botones específicos con diferentes colores */
 .form-buttons button:nth-child(1) {
-  background: #7f8c8d;
+  background: #7f8c8d; /* Gris */
   color: white;
 }
 .form-buttons button:nth-child(1):hover {
@@ -210,7 +226,7 @@ body {
 }
 
 .form-buttons button:nth-child(2) {
-  background: #e74c3c;
+  background: #e74c3c; /* Rojo */
   color: white;
 }
 .form-buttons button:nth-child(2):hover {
@@ -218,16 +234,18 @@ body {
 }
 
 .form-buttons button:nth-child(3) {
-  background: #3498db;
+  background: #3498db; /* Azul */
   color: white;
 }
 .form-buttons button:nth-child(3):hover {
   background: #2980b9;
 }
 
-/* RESPONSIVE */
+/* ===================
+    RESPONSIVE
+   =================== */
 @media(max-width: 600px) {
   .modal form {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Una sola columna en móviles */
   }
 }

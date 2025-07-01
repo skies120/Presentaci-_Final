@@ -3,7 +3,13 @@ import Navbar from '../../components/JSX/Navbar';
 import DishCard from '../../components/JSX/DishCard';
 import '../CSS/DailyMenu.css';
 
+// ---------------------------
+// Componente DailyMenu
+// Muestra el menú del día, dividido en categorías (entrada, segundo, postre)
+// Cada categoría renderiza un set de DishCards
+// ---------------------------
 const DailyMenu = () => {
+  // Menú estático para el ejemplo
   const menu = {
     entrada: [
       {
@@ -99,6 +105,7 @@ const DailyMenu = () => {
       <Navbar />
       <h1>Menú del Día</h1>
 
+      {/* Map por categorías, protegido contra null o undefined */}
       {['entrada', 'segundo', 'postre'].map((category) => (
         <div key={category}>
           <h2 className="menu-category">
@@ -108,9 +115,10 @@ const DailyMenu = () => {
               ? 'Platos de Fondo'
               : 'Postres'}
           </h2>
+
           <div className="dishes-grid">
-            {menu[category].map((dish) => (
-              <DishCard key={dish.id} dish={dish} />
+            {(menu[category] || []).map((dish) => (
+              dish && <DishCard key={dish.id} dish={dish} />
             ))}
           </div>
         </div>
