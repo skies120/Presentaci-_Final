@@ -220,3 +220,40 @@
   width: 100%;
 }
 }
+
+/* -------------------- ESTILOS DE LA TABLE CARD -------------------- */
+.table-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.table-card:hover {
+  transform: scale(1.03);
+}
+
+.table-card.selected {
+  border: 2px solid #e74c3c;
+}
+
+.table-card.reserved {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.table-card .reserved-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(231, 76, 60, 0.8);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-weight: bold;
+}

@@ -16,14 +16,12 @@ const Reservation = () => {
   const [reservedTables, setReservedTables] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Cargar reservas guardadas al entrar
   useEffect(() => {
     const reservasGuardadas = JSON.parse(localStorage.getItem('reservas')) || [];
     setReservedTables(reservasGuardadas);
   }, []);
 
   const handleTableSelect = (tableId) => {
-    // Comprueba si está reservada en la fecha y hora seleccionadas
     const yaReservada = reservedTables.some(r =>
       new Date(r.fecha).toDateString() === selectedDate.toDateString() &&
       r.hora === selectedTime &&
@@ -37,15 +35,14 @@ const Reservation = () => {
     if (!selectedTable) return;
 
     const nuevaReserva = {
-      fecha: selectedDate.toISOString(),
+      fecha: selectedDate.toISOString(), // 👈 siempre en ISO
       hora: selectedTime,
       mesa: selectedTable,
       personas: guests
     };
 
-    const nuevasReservas = [...reservedTables, nuevaReserva];
-    localStorage.setItem('reservas', JSON.stringify(nuevasReservas));
-    setReservedTables(nuevasReservas);
+    // Guarda también en localStorage para persistencia al recargar confirmación
+    localStorage.setItem('ultimaReserva', JSON.stringify(nuevaReserva));
 
     navigate('/confirmacion', { state: nuevaReserva });
   };
@@ -79,10 +76,7 @@ const Reservation = () => {
       <Navbar />
       <div className="restaurant-info">
         <h2>Reserva tu experiencia culinaria</h2>
-        <p>
-          En nuestro restaurante, cada plato es una celebración de sabor.
-          Disfruta de una cocina exquisita en un ambiente acogedor.
-        </p>
+        <p>Disfruta de una cocina exquisita en un ambiente acogedor.</p>
       </div>
 
       <div className="reservation-form">
@@ -97,9 +91,9 @@ const Reservation = () => {
 
         <div className="form-group">
           <label>Selecciona una fecha</label>
-          <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-            <p>Fecha seleccionada: {selectedDate?.toLocaleDateString()}</p>
-          </div>
+          <p style={{ textAlign: 'center', marginBottom: '10px' }}>
+            Fecha seleccionada: {selectedDate?.toLocaleDateString()}
+          </p>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
             <DatePicker
               selected={selectedDate}

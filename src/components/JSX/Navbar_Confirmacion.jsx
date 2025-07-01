@@ -7,13 +7,14 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="logo">
-        <img src={logo} alt="Logo del restaurante" className="logo-img" />
+        <Link to="/">
+          <img src={logo} alt="Logo del restaurante" className="logo-img" />
+        </Link>
       </div>
       <div className="titulo-navbar">
         <h1>Confirmación</h1>
       </div>
     </nav>
-
   );
 };
 
