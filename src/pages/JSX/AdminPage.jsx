@@ -3,24 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import '../CSS/AdminPage.css';
 import Navbar from '../../components/JSX/Navbar';
 
-// Componente principal
 const AdminPage = () => {
-  const navigate = useNavigate();  // Hook para redirecciones
-
-  // Estado para el mes actual mostrado en el calendario
   const [currentDate, setCurrentDate] = useState(new Date());
-  // Estado para la fecha seleccionada (default: hoy)
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-
-  // Estados para reservas
-  const [reservas, setReservas] = useState({}); // agrupadas por fecha
-  const [todasLasReservas, setTodasLasReservas] = useState([]); // lista total
-
-  // Estados para modal (crear/editar reserva)
-  const [showModal, setShowModal] = useState(false); // abrir/cerrar modal
-  const [modalType, setModalType] = useState(''); // 'create' o 'edit'
-  const [currentReserva, setCurrentReserva] = useState(null); // reserva actual para editar
-  const [formData, setFormData] = useState({ // datos del formulario
+  const [reservas, setReservas] = useState({});
+  const [todasLasReservas, setTodasLasReservas] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState('');
+  const [currentReserva, setCurrentReserva] = useState(null);
+  const [formData, setFormData] = useState({
     mesa: '',
     comensales: '',
     fecha: selectedDate,
@@ -30,13 +21,27 @@ const AdminPage = () => {
     gmail: '',
     notas: ''
   });
+  const [error, setError] = useState('');
 
-  // useEffect para cargar reservas desde localStorage al montar el componente
+  const tables = [
+    { id: 1, image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4" },
+    { id: 2, image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5" },
+    { id: 3, image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4" },
+    { id: 4, image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5" },
+    { id: 5, image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4" },
+    { id: 6, image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5" }
+  ];
+
+  const availableTimes = [];
+  for (let hour = 12; hour <= 22; hour++) {
+    availableTimes.push(`${hour}:00`);
+    if (hour < 22) availableTimes.push(`${hour}:30`);
+  }
+
   useEffect(() => {
     const reservasGuardadas = JSON.parse(localStorage.getItem('reservas')) || [];
     setTodasLasReservas(reservasGuardadas);
 
-    // Agrupar por fecha
     const agrupadas = {};
     reservasGuardadas.forEach(reserva => {
       const fecha = reserva.fecha;
@@ -46,29 +51,27 @@ const AdminPage = () => {
     setReservas(agrupadas);
   }, []);
 
-  // Cambiar mes en el calendario
   const changeMonth = (increment) => {
     const newDate = new Date(currentDate);
     newDate.setMonth(newDate.getMonth() + increment);
     setCurrentDate(newDate);
   };
 
-  // Generar estructura de calendario para el mes actual
   const generateCalendar = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    const firstDayOfMonth = new Date(year, month, 1).getDay(); // día de la semana
-    const daysInMonth = new Date(year, month + 1, 0).getDate(); // días en mes
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const startDay = (firstDayOfMonth + 6) % 7;
 
-    const startDay = (firstDayOfMonth + 6) % 7; // ajustar para que lunes=0
     const calendar = [];
-    let dayCounter = 1 - startDay; // iniciar con offset negativo para primeras celdas vacías
+    let dayCounter = 1 - startDay;
 
     for (let i = 0; i < 6; i++) {
       const week = [];
       for (let j = 0; j < 7; j++) {
         if (dayCounter < 1 || dayCounter > daysInMonth) {
-          week.push(null); // días fuera del mes
+          week.push(null);
         } else {
           week.push(dayCounter);
         }
@@ -80,7 +83,6 @@ const AdminPage = () => {
     return calendar;
   };
 
-  // Al hacer click en un día, setea la fecha seleccionada
   const handleDateClick = (day) => {
     if (!day) return;
     const year = currentDate.getFullYear();
@@ -89,14 +91,15 @@ const AdminPage = () => {
     setSelectedDate(formattedDate);
   };
 
-  // Abrir modal para crear o editar reserva
   const openModal = (type, reserva = null) => {
     setModalType(type);
     setCurrentReserva(reserva);
+    setError('');
+
     if (type === 'edit' && reserva) {
-      setFormData({ ...reserva }); // carga datos para editar
-    } else if (type === 'create') {
-      setFormData({ // limpia formulario
+      setFormData({ ...reserva });
+    } else {
+      setFormData({
         mesa: '',
         comensales: '',
         fecha: selectedDate,
@@ -107,49 +110,58 @@ const AdminPage = () => {
         notas: ''
       });
     }
-    setShowModal(true); // mostrar modal
+
+    setShowModal(true);
   };
 
-  // Manejar cambios en el formulario
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Guardar reserva (crear o editar)
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { mesa, hora, fecha } = formData;
+
+    const mesaYaReservada = todasLasReservas.some(r =>
+      r.fecha === fecha &&
+      r.hora === hora &&
+      parseInt(r.mesa) === parseInt(mesa) &&
+      (modalType !== 'edit' || r.id !== currentReserva?.id)
+    );
+
+    if (mesaYaReservada) {
+      setError(`La mesa ${mesa} ya está reservada para las ${hora}.`);
+      return;
+    }
+
     let nuevasReservas = [...todasLasReservas];
     const nuevaData = {
       ...formData,
-      mesa: Number(formData.mesa), // asegurarse de que sea número
+      mesa: Number(mesa),
       id: modalType === 'create' ? Date.now() : currentReserva.id
     };
 
     if (modalType === 'create') {
       nuevasReservas.push(nuevaData);
-    } else if (modalType === 'edit') {
+    } else {
       nuevasReservas = nuevasReservas.map(r =>
         r.id === currentReserva.id ? nuevaData : r
       );
     }
 
-    // guardar en localStorage y actualizar estado
     localStorage.setItem('reservas', JSON.stringify(nuevasReservas));
     setTodasLasReservas(nuevasReservas);
 
-    // volver a agrupar por fecha
     const agrupadas = {};
     nuevasReservas.forEach(r => {
       if (!agrupadas[r.fecha]) agrupadas[r.fecha] = [];
       agrupadas[r.fecha].push(r);
     });
     setReservas(agrupadas);
-
-    setShowModal(false); // cerrar modal
+    setShowModal(false);
   };
 
-  // Eliminar reserva
   const handleDelete = () => {
     const nuevasReservas = todasLasReservas.filter(r => r.id !== currentReserva.id);
     localStorage.setItem('reservas', JSON.stringify(nuevasReservas));
@@ -161,21 +173,18 @@ const AdminPage = () => {
       agrupadas[r.fecha].push(r);
     });
     setReservas(agrupadas);
-
     setShowModal(false);
   };
 
-  // Nombres de los meses para el encabezado
   const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-  const weeks = generateCalendar(); // generar semanas del calendario
+  const weeks = generateCalendar();
 
   return (
     <div className="admin-container">
-      <Navbar /> {/* navbar superior */}
+      <Navbar />
 
       <div className="top-panel">
         <h2>Panel de Administración</h2>
-        <button className="logout-btn" onClick={() => navigate('/')}>Cerrar Sesión</button>
       </div>
 
       <div className="calendar-container">
@@ -192,7 +201,7 @@ const AdminPage = () => {
         {weeks.map((week, i) => (
           <div key={i} className="calendar-week">
             {week.map((day, j) => {
-              const dateStr = day ? `${currentDate.getFullYear()}-${(currentDate.getMonth()+1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}` : '';
+              const dateStr = day ? `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}` : '';
               const hasReservations = day && reservas[dateStr]?.length > 0;
               return (
                 <div
@@ -232,11 +241,22 @@ const AdminPage = () => {
         <div className="modal-overlay">
           <div className="modal">
             <h3>{modalType === 'create' ? 'Nueva' : 'Editar'} Reserva</h3>
+            {error && <p className="error">{error}</p>}
             <form onSubmit={handleSubmit}>
-              <input name="mesa" type="number" placeholder="Mesa" value={formData.mesa} onChange={handleInputChange} required />
+              <select name="mesa" value={formData.mesa} onChange={handleInputChange} required>
+                <option value="">Mesa</option>
+                {tables.map(t => (
+                  <option key={t.id} value={t.id}>Mesa {t.id}</option>
+                ))}
+              </select>
               <input name="comensales" type="number" placeholder="Comensales" value={formData.comensales} onChange={handleInputChange} required />
               <input name="fecha" type="date" value={formData.fecha} onChange={handleInputChange} required />
-              <input name="hora" type="time" value={formData.hora} onChange={handleInputChange} required />
+              <select name="hora" value={formData.hora} onChange={handleInputChange} required>
+                <option value="">Hora</option>
+                {availableTimes.map(time => (
+                  <option key={time} value={time}>{time}</option>
+                ))}
+              </select>
               <input name="cliente" type="text" placeholder="Cliente" value={formData.cliente} onChange={handleInputChange} required />
               <input name="telefono" type="text" placeholder="Teléfono" value={formData.telefono} onChange={handleInputChange} required />
               <input name="gmail" type="email" placeholder="Gmail" value={formData.gmail} onChange={handleInputChange} required />

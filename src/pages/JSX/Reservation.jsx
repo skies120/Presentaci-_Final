@@ -7,71 +7,67 @@ import Navbar from '../../components/JSX/Navbar';
 import TableCard from '../../components/JSX/TableCard';
 import '../CSS/Reservation.css';
 
-// Componente principal de reservación
 const Reservation = () => {
-  const navigate = useNavigate(); // hook para navegación entre páginas
+  const navigate = useNavigate();
 
-  // Estados principales
-  const [guests, setGuests] = useState(2); // número de comensales
-  const [selectedDate, setSelectedDate] = useState(new Date()); // fecha seleccionada
-  const [selectedTime, setSelectedTime] = useState('19:00'); // hora seleccionada
-  const [selectedTable, setSelectedTable] = useState(null); // mesa seleccionada
-  const [reservedTables, setReservedTables] = useState([]); // lista de todas las reservas
-  const [currentMonth, setCurrentMonth] = useState(new Date()); // para controlar el calendario
+  const [guests, setGuests] = useState(2);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState('19:00');
+  const [selectedTable, setSelectedTable] = useState(null);
+  const [reservedTables, setReservedTables] = useState([]);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Al montar el componente, carga reservas guardadas del localStorage
   useEffect(() => {
     const reservasGuardadas = JSON.parse(localStorage.getItem('reservas')) || [];
     setReservedTables(reservasGuardadas);
   }, []);
 
-  // Formatea fecha a YYYY-MM-DD
   const formatDate = (date) => {
     return date.toISOString().split('T')[0];
   };
 
-  // Selección de mesa
   const handleTableSelect = (tableId) => {
-    // Revisa si ya está reservada esa mesa para la fecha y hora elegidas
     const yaReservada = reservedTables.some(r =>
       r.fecha === formatDate(selectedDate) &&
       r.hora === selectedTime &&
       parseInt(r.mesa) === tableId
     );
-    if (yaReservada) return; // si está reservada, no hace nada
-    setSelectedTable(tableId); // sino, selecciona la mesa
+    if (yaReservada) return;
+    setSelectedTable(tableId);
   };
 
-  // Confirma la reserva y la guarda
   const handleReserve = () => {
     if (!selectedTable) return;
 
+    // Reserva con todos los campos completos aunque estén vacíos
     const nuevaReserva = {
+      mesa: selectedTable,
+      comensales: guests,
       fecha: formatDate(selectedDate),
       hora: selectedTime,
-      mesa: selectedTable,
-      personas: guests
+      cliente: "",
+      telefono: "",
+      gmail: "",
+      notas: "",
+      id: Date.now()
     };
 
     const nuevasReservas = [...reservedTables, nuevaReserva];
     localStorage.setItem('reservas', JSON.stringify(nuevasReservas));
     setReservedTables(nuevasReservas);
 
-    navigate('/confirmacion', { state: nuevaReserva }); // navega a página de confirmación
+    navigate('/confirmacion', { state: nuevaReserva });
   };
 
-  // Al cambiar mes en el calendario
   const handleMonthChange = (date) => {
     setCurrentMonth(new Date(date.getFullYear(), date.getMonth(), 1));
   };
 
-  // Filtra para no permitir fines de semana
   const isWeekday = (date) => {
     const day = date.getDay();
     return day !== 0 && day !== 6;
   };
 
-  // Define las mesas disponibles con imágenes
   const tables = [
     { id: 1, image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4" },
     { id: 2, image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5" },
@@ -81,7 +77,6 @@ const Reservation = () => {
     { id: 6, image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5" }
   ];
 
-  // Genera horas disponibles cada 30 minutos entre 12:00 y 22:30
   const availableTimes = [];
   for (let hour = 12; hour <= 22; hour++) {
     availableTimes.push(`${hour}:00`);
@@ -90,7 +85,7 @@ const Reservation = () => {
 
   return (
     <div className="reservation-page">
-      <Navbar /> {/* navbar superior */}
+      <Navbar />
 
       <div className="restaurant-info">
         <h2>Reserva tu experiencia culinaria</h2>
@@ -101,7 +96,6 @@ const Reservation = () => {
       </div>
 
       <div className="reservation-form">
-        {/* Seleccionar número de comensales */}
         <div className="form-group">
           <label>Elige la cantidad de clientes</label>
           <select value={guests} onChange={(e) => setGuests(parseInt(e.target.value))}>
@@ -111,7 +105,6 @@ const Reservation = () => {
           </select>
         </div>
 
-        {/* Seleccionar fecha con react-datepicker */}
         <div className="form-group">
           <label>Selecciona una fecha</label>
           <div style={{ textAlign: 'center', marginBottom: '10px' }}>
@@ -122,7 +115,7 @@ const Reservation = () => {
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               inline
-              locale={es} // español
+              locale={es}
               minDate={new Date()}
               maxDate={new Date(new Date().setMonth(new Date().getMonth() + 3))}
               filterDate={isWeekday}
@@ -132,7 +125,6 @@ const Reservation = () => {
           </div>
         </div>
 
-        {/* Seleccionar hora */}
         <div className="form-group">
           <label>Selecciona una hora</label>
           <select value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}>
@@ -143,7 +135,6 @@ const Reservation = () => {
         </div>
       </div>
 
-      {/* Renderiza las mesas */}
       <h3>Selecciona una mesa</h3>
       <div className="tables-grid">
         {tables.map(table => {
@@ -165,13 +156,12 @@ const Reservation = () => {
         })}
       </div>
 
-      {/* Botones de acción */}
       <div className="action-buttons">
         <button className="back-button" onClick={() => navigate('/menu')}>Regresar</button>
         <button 
           className="continue-button"
           onClick={handleReserve}
-          disabled={!selectedTable} // deshabilitado hasta que elija mesa
+          disabled={!selectedTable}
         >
           Continuar
         </button>

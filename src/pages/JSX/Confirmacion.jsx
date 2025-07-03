@@ -60,9 +60,13 @@ const Confirmacion = () => {
       notas: formulario.notas
     };
 
-    // Guarda en el mismo arreglo de reservas que lee el Admin
+    // Guarda en el mismo arreglo, ACTUALIZANDO por ID
     const reservasGuardadas = JSON.parse(localStorage.getItem('reservas')) || [];
-    localStorage.setItem('reservas', JSON.stringify([...reservasGuardadas, nuevaReservaConfirmada]));
+    const reservasActualizadas = reservasGuardadas.map(r =>
+      r.id === reserva.id ? nuevaReservaConfirmada : r
+    );
+
+    localStorage.setItem('reservas', JSON.stringify(reservasActualizadas));
 
     navigate('/gracias', { state: nuevaReservaConfirmada });
   };
